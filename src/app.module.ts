@@ -1,26 +1,38 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RedisModule } from '@nestjs-modules/ioredis';
+// import { RedisModule } from '@nestjs-modules/ioredis';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { configValidationSchema } from './config.schema';
 // import { ThrottlerModule } from '@nestjs/throttler';
 // import { UrlModule } from './url/url.module';
 // import { AnalyticsModule } from './analytics/analytics.module';
 // import { QrcodeModule } from './qrcode/qrcode.module';
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    RedisModule.forRoot({
-      type: 'single',
-      url: process.env.REDIS_URL,
+    ConfigModule.forRoot({
+      envFilePath: [`stage.${process.env.STAGE}.env`],
+      validationSchema: configValidationSchema,
+      isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
-      autoLoadEntities: true,
-      synchronize: true,
+
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
+          autoLoadEntities: true,
+          synchronize: true,
+        };
+      },
     }),
     UsersModule,
   ],
