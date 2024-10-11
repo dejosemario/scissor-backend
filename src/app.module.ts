@@ -10,6 +10,7 @@ import { configValidationSchema } from './config.schema';
 // import { UrlModule } from './url/url.module';
 // import { AnalyticsModule } from './analytics/analytics.module';
 // import { QrcodeModule } from './qrcode/qrcode.module';
+import { LinksModule } from './links/links.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +36,7 @@ import { configValidationSchema } from './config.schema';
       },
     }),
     UsersModule,
+    LinksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
