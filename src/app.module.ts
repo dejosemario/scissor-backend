@@ -11,6 +11,7 @@ import { configValidationSchema } from './config.schema';
 // import { AnalyticsModule } from './analytics/analytics.module';
 // import { QrcodeModule } from './qrcode/qrcode.module';
 import { LinksModule } from './links/links.module';
+import { Link } from './links/link.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,6 +31,7 @@ import { LinksModule } from './links/links.module';
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
+          entities: [Link],
           autoLoadEntities: true,
           synchronize: true,
         };
