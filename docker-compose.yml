@@ -6,12 +6,16 @@ services:
       target: dev
     ports:
       - 3000:3000
+    restart: always
     volumes:
       - ./src:/app/src
+      - /app/node_modules
     depends_on:
       - db
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     env_file:
-      - stage.dev.env  
+      - stage.dev.env
 
   db:
     image: postgres
@@ -20,12 +24,12 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgres
-  
+
   dbadmin:
     image: dpage/pgadmin4
     restart: always
-    ports: 
-      - "5050:80"
+    ports:
+      - '5050:80'
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: pgadmin4

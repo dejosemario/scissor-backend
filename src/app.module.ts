@@ -12,6 +12,7 @@ import { configValidationSchema } from './config.schema';
 // import { QrcodeModule } from './qrcode/qrcode.module';
 import { LinksModule } from './links/links.module';
 import { Link } from './links/link.entity';
+import { WildcardModule } from './wildcard/wildcard.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +40,7 @@ import { Link } from './links/link.entity';
     }),
     UsersModule,
     LinksModule,
+    WildcardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
